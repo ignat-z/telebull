@@ -10,11 +10,15 @@ module BullsCows
       @game_digits = digits(game_number)
     end
 
-    def guess(attempt: 0)
-      Attempt.new(@user_number, bulls, cows, (attempt + 1))
+    def guess(counter: 0)
+      Attempt.new(@user_number, bulls, cows, (counter + 1), completed?)
     end
 
     private
+
+    def completed?
+      @user_digits == @game_digits
+    end
 
     def bulls
       @game_digits.zip(@user_digits).count do |(game_digit, user_digit)|
