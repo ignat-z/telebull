@@ -1,0 +1,14 @@
+U: /start
+B: Hello, ZI!
+B: How many digits do you want? (N > 2)
+U: 4
+B: Got it, your guess?
+U: 1290
+B: Guess #1: 2🐂, 0🐄
+U: 3478
+B: Guess #2: 0🐂, 2🐄
+U: 3412
+B: Guess #3: 0🐂, 4🐄
+U: 1234
+B: Guess #4: 4🐂, 0🐄
+B: You're right!

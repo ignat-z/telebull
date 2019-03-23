@@ -5,8 +5,8 @@ require './lib/bulls_cows/number'
 
 module BullsCows
   class Game
-    def initialize(number: Number.new.generate, counter: 0)
-      @number = number
+    def initialize(number: nil, counter: 0, digits: 4)
+      @number = number || Number.new(digits: digits).generate
       @counter = counter
     end
 
