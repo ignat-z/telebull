@@ -6,9 +6,13 @@ require './lib/telegram/game_workflow'
 RSpec.describe Telegram::GameWorkflow do
   subject { described_class.new(keeper) }
 
-  let(:keeper) { LogKeeper.new }
-  let(:answers) { ['/start', '4', '1290', '3478', '3412', '1234'] }
   let(:dialog) { File.read('./spec/support/expected_dialog.txt') }
+  let(:keeper) { LogKeeper.new }
+  let(:answers) do
+    dialog.split("\n")
+          .filter { |line| line.start_with?(LogKeeper::USER_START) }
+          .map { |line| line.sub(LogKeeper::USER_START, '') }
+  end
 
   describe 'workflow' do
     before do
@@ -24,6 +28,15 @@ RSpec.describe Telegram::GameWorkflow do
         keeper.log.zip(dialog.split("\n")).each do |(actual, expected)|
           expect(actual).to eql(expected)
         end
+      end
+    end
+
+    it 'tests it step by step' do
+      dialog.split("\n").each do |line|
+        if line.start_with?(LogKeeper::USER_START)
+          subject.transfer!(keeper.answer(line.sub(LogKeeper::USER_START, '')))
+        end
+        expect(keeper.head).to eql(line)
       end
     end
   end
