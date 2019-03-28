@@ -2,6 +2,8 @@
 
 require 'telegram/bot'
 
+require './lib/telegram/dialog_actor'
+
 module Telegram
   class GameWorkflow
     extend Forwardable
@@ -16,7 +18,7 @@ module Telegram
     TRANSITIONS = [
       Transition.new(NEW_GAME, WAITING_FOR_DIGITS, :start_game),
       Transition.new(WAITING_FOR_DIGITS, WAITING_FOR_GUESS, :store_number),
-      Transition.new(WAITING_FOR_GUESS, END_GAME, :complete)
+      Transition.new(WAITING_FOR_GUESS, NEW_GAME, :complete)
     ].freeze
 
     TRIGGER_MESSAGE = '/start'
@@ -35,15 +37,14 @@ module Telegram
 
     def_delegators :@dialog, *DialogActor::TRANSITIONS.keys
 
-    def transfer!(message)
+    def call(message)
       reply
       transition = TRANSITIONS.find { |possible| possible.from == @game_state }
       @game_state = transition.to if method(transition.action).call(message)
+      self
     end
 
     def start_game(message)
-      return false unless message.text == TRIGGER_MESSAGE
-
       say { @room.print(text: "Hello, #{message.from.first_name}!") }
       ask do
         @room.print(text: 'How many digits do you want? (N > 2)',
@@ -68,9 +69,14 @@ module Telegram
           @room.print(text:
             "Guess ##{result.counter}: #{result.bulls}🐂, #{result.cows}🐄")
         end
-
-        result.completed ? finish { @room.print(text: "You're right!") } : ask
+        result.completed ? suicide(message) : ask
       end.completed
+    end
+
+    def suicide(_message)
+      finish { @room.print(text: "You're right!") }
+      @game_state = NEW_GAME
+      @dialog = DialogActor.new(state: DialogActor::NEW_CHAT)
     end
   end
 end
