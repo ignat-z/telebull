@@ -31,7 +31,7 @@ module BullsCows
     end
 
     def digits(number)
-      number.to_s.chars.map(&:to_i)
+      number.to_s.chars
     end
   end
 end

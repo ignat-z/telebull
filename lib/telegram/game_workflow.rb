@@ -64,7 +64,7 @@ module Telegram
     end
 
     def complete(message)
-      @game.guess(message.text.to_i).tap do |result|
+      @game.guess(message.text).tap do |result|
         say do
           @room.print(text:
             "Guess ##{result.counter}: #{result.bulls}🐂, #{result.cows}🐄")

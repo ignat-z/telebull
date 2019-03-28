@@ -29,7 +29,7 @@ module Telegram
     end
 
     def process_attempt(game, attempt)
-      game.guess(attempt.text.to_i).tap do |result|
+      game.guess(attempt.text).tap do |result|
         reply("Guess ##{result.counter}: #{result.bulls}🐂, #{result.cows}🐄")
       end
     end

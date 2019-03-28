@@ -4,7 +4,7 @@ require 'spec_helper'
 require './lib/bulls_cows/tick'
 
 RSpec.describe BullsCows::Tick do
-  subject { described_class.new(1234, 2134) }
+  subject { described_class.new('1234', '2134') }
 
   describe '#guess' do
     it "calculates user's input result" do
@@ -26,7 +26,7 @@ RSpec.describe BullsCows::Tick do
     end
 
     it "stores user's input" do
-      expect(subject.guess(counter: 0).guess).to eql(2134)
+      expect(subject.guess(counter: 0).guess).to eql('2134')
     end
   end
 end
