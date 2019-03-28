@@ -45,21 +45,18 @@ module Telegram
     end
 
     def start_game(message)
-      say { @room.print(text: "Hello, #{message.from.first_name}!") }
-      ask do
-        @room.print(text: 'How many digits do you want? (N > 2)',
-                    reply_markup: KEYBOARD)
+      say do
+        @room.print(text: I18n.t('game.hello', name: message.from.first_name))
       end
+      ask { @room.print(text: I18n.t('game.request'), reply_markup: KEYBOARD) }
       true
     end
 
     def store_number(message)
-      if message.text.to_i < MINIMAL_DIGITS
-        ask { @room.print(text: 'Invalid number, please, try another') }
-        return false
-      end
+      return false if message.text.to_i < MINIMAL_DIGITS
+
       @game = BullsCows::Game.new(digits: message.text.to_i)
-      ask { @room.print(text: 'Got it, your guess?') }
+      ask { @room.print(text: I18n.t('game.guess')) }
       true
     end
 
@@ -67,14 +64,14 @@ module Telegram
       @game.guess(message.text).tap do |result|
         say do
           @room.print(text:
-            "Guess ##{result.counter}: #{result.bulls}🐂, #{result.cows}🐄")
+            I18n.t('game.result', result.to_h.slice(:counter, :bulls, :cows)))
         end
         result.completed ? suicide(message) : ask
       end.completed
     end
 
     def suicide(_message)
-      finish { @room.print(text: "You're right!") }
+      finish { @room.print(text: I18n.t('game.final')) }
       @game_state = NEW_GAME
       @dialog = DialogActor.new(state: DialogActor::NEW_CHAT)
     end

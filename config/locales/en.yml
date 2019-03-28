@@ -1,0 +1,7 @@
+en:
+  game:
+    final: "You're right!"
+    guess: "Got it, your guess?"
+    hello: "Hello, %{name}!"
+    request: "How many digits do you want? (N > 2)"
+    result: "Guess #%{counter}: %{bulls}🐂, %{cows}🐄"

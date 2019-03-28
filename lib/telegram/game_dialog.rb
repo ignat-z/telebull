@@ -10,11 +10,11 @@ module Telegram
 
     def call
       Fiber.new do |message|
-        reply("Hello, #{message.from.first_name}!")
+        reply(I18n.t('game.hello', name: message.from.first_name))
         game = BullsCows::Game.new(digits: request_digits)
-        attempt = request('Got it, your guess?')
+        attempt = request(I18n.t('game.guess'))
         attempt = wait until process_attempt(game, attempt).completed
-        answer("You're right!")
+        answer(I18n.t('game.final'))
       end
     end
 
@@ -22,15 +22,16 @@ module Telegram
 
     def request_digits
       loop do
-        answer = request('How many digits do you want? (N > 2)',
-                         reply_markup: KEYBOARD).text.to_i
+        answer = request(
+          I18n.t('game.request'), reply_markup: KEYBOARD
+        ).text.to_i
         break(answer) if answer >= MINIMAL_DIGITS
       end
     end
 
     def process_attempt(game, attempt)
       game.guess(attempt.text).tap do |result|
-        reply("Guess ##{result.counter}: #{result.bulls}🐂, #{result.cows}🐄")
+        reply(I18n.t('game.result', result.to_h.slice(:counter, :bulls, :cows)))
       end
     end
 

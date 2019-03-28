@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'webmock/rspec'
+require './config/i18n'
 
 Dir['spec/support/**/*.rb'].each { |f| require f.sub('spec/', '') }
 

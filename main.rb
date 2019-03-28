@@ -4,6 +4,7 @@
 require 'dotenv/load'
 require 'telegram/bot'
 
+require './config/i18n'
 require './lib/telegram/runtime'
 
 Telegram::Bot::Client.run(
