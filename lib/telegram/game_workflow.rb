@@ -22,10 +22,7 @@ module Telegram
     ].freeze
 
     TRIGGER_MESSAGE = '/start'
-    KEYBOARD = Telegram::Bot::Types::ReplyKeyboardMarkup.new(
-      keyboard: (3..6).map(&:to_s),
-      one_time_keyboard: true
-    )
+    KEYBOARD = (3..6).to_a
     MINIMAL_DIGITS = 3
 
     def initialize(room, game_state: NEW_GAME,
@@ -48,7 +45,7 @@ module Telegram
       say do
         @room.print(text: I18n.t('game.hello', name: message.from.first_name))
       end
-      ask { @room.print(text: I18n.t('game.request'), reply_markup: KEYBOARD) }
+      ask { @room.print(text: I18n.t('game.request'), variants: KEYBOARD) }
       true
     end
 

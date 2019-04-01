@@ -22,7 +22,11 @@ class LogKeeper
   end
 
   def print(attributes)
-    result = [BOT_START, attributes[:text]].join
+    result = [
+      BOT_START,
+      attributes[:text],
+      *(" [#{attributes[:variants].join(' ')}]" if attributes[:variants])
+    ].join
     @buffer << result
     @log << result
   end

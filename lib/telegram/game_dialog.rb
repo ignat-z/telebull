@@ -3,10 +3,7 @@
 module Telegram
   class GameDialog
     MINIMAL_DIGITS = 3
-    KEYBOARD = Telegram::Bot::Types::ReplyKeyboardMarkup.new(
-      keyboard: (3..6).map(&:to_s),
-      one_time_keyboard: true
-    )
+    KEYBOARD = (3..6).to_a
 
     def call
       Fiber.new do |message|
@@ -22,9 +19,7 @@ module Telegram
 
     def request_digits
       loop do
-        answer = request(
-          I18n.t('game.request'), reply_markup: KEYBOARD
-        ).text.to_i
+        answer = request(I18n.t('game.request'), variants: KEYBOARD).text.to_i
         break(answer) if answer >= MINIMAL_DIGITS
       end
     end
