@@ -26,6 +26,7 @@ module Telegram
       case message.text
       when '/startw' then GameWorkflow.new(room(message))
       when '/startx' then GameFiber.new(room(message))
+      when '/cancel' then DefaultChat.new(room(message))
       else @dialogs[message.chat.id]
       end
     end

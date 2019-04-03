@@ -5,9 +5,9 @@ require 'telegram/bot'
 module Telegram
   class DefaultChat
     HELP = <<~MESSAGE
-      /startw -- to start Bulls'n'Cows Workflow-based version
-      /startx -- to start Bulls'n'Cows Fiber-based version
-      any     -- run this dialog
+      /startw - start Bulls'n'Cows Workflow-based version
+      /startx - start Bulls'n'Cows Fiber-based version
+      /cancel - interupt current seession
     MESSAGE
 
     def initialize(room)
